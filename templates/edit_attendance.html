@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Edit Attendance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .edit-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        select, input, button {
+            font-size: 16px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #025b3b;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.02);
+        }
+
+        .cancel-button {
+            background-color: #f4f4f4;
+            color: #555;
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .cancel-button:hover {
+            background-color: #e0e0e0;
+            border-color: #ccc;
+            color: #333;
+        }
+
+        .form-feedback {
+            font-size: 14px;
+            color: #e74c3c;
+            margin-top: -15px;
+            margin-bottom: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="edit-container">
+            <h1>Edit Attendance</h1>
+            <form action="{{ url_for('edit_attendance', record_id=record.id) }}" method="POST">
+                <label for="status">Attendance Status:</label>
+                <select name="status" id="status" required>
+                    <option value="Present" {% if record.status == 'Present' %}selected{% endif %}>Present</option>
+                    <option value="Absent" {% if record.status == 'Absent' %}selected{% endif %}>Absent</option>
+                </select>
+                <label for="comments">Comments (Optional):</label>
+                <input type="text" name="comments" id="comments" placeholder="Add any notes about attendance" value="{{ record.comments if record.comments else '' }}">
+                
+                {% if error %}
+                    <div class="form-feedback">{{ error }}</div>
+                {% endif %}
+                
+                <button type="submit">Save Changes</button>
+            </form>
+            <a href="{{ url_for('report') }}" class="cancel-button">Cancel</a>
+        </div>
+    </main>
+{% endblock %}

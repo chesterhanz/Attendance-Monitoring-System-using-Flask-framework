@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard</title>
+    <style>
+        .analytics-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+        }
+
+        .analytics-header {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #025b3b;
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .analytics-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .analytics-header .subtext {
+            font-size: 1rem;
+        }
+
+        .analytics-content {
+            text-align: center;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .analytics-chart {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #fff;
+        }
+        @media (max-width: 768px) {
+            .analytics-header h1 {
+                font-size: 2rem;
+            }
+
+            .chart-title {
+                font-size: 1.2rem;
+            }
+
+            .analytics-container {
+                padding: 10px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="analytics-container">
+    <header class="analytics-header">
+        <h1>Attendance Analytics Dashboard</h1>
+    </header>
+
+    <div class="analytics-content">
+        <h2 class="chart-title">Attendance Overview</h2>
+        <div class="chart-container">
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Attendance Chart" class="analytics-chart">
+        </div>
+    </div>
+</div>
+{% endblock %}

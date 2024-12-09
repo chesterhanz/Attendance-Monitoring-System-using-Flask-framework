@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+        }
+
+        .dashboard-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e2e2;
+        }
+
+        th {
+            background-color: #025b3b;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions a,
+        .actions form button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .actions a {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+        }
+
+        .actions form button {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .actions a:hover,
+        .actions form button:hover {
+            transform: scale(1.05);
+        }
+
+        .analytics-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .analytics-link {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .analytics-link:hover {
+            background-color: #218838;
+            transform: scale(1.1);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="dashboard-container">
+        <h1>Admin Dashboard</h1>
+        <h2>All Attendance Records</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Date</th>
+                    <th>Session</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    {% set morning_record = none %}
+                    {% set afternoon_record = none %}
+                    {% for attendance in attendance_data[user.username] %}
+                        {% if attendance.session == "Morning" %}
+                            {% set morning_record = attendance %}
+                        {% elif attendance.session == "Afternoon" %}
+                            {% set afternoon_record = attendance %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- Morning Record Row -->
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ morning_record.date if morning_record else 'No record' }}</td>
+                        <td>Morning</td>
+                        <td>{{ morning_record.status if morning_record else 'No record' }}</td>
+                        <td class="actions">
+                            {% if morning_record %}
+                                <a href="{{ url_for('edit_attendance', record_id=morning_record.id) }}">Edit</a>
+                                <form action="{{ url_for('delete_attendance', record_id=morning_record.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <!-- Afternoon Record Row -->
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ afternoon_record.date if afternoon_record else 'No record' }}</td>
+                        <td>Afternoon</td>
+                        <td>{{ afternoon_record.status if afternoon_record else 'No record' }}</td>
+                        <td class="actions">
+                            {% if afternoon_record %}
+                                <a href="{{ url_for('edit_attendance', record_id=afternoon_record.id) }}">Edit</a>
+                                <form action="{{ url_for('delete_attendance', record_id=afternoon_record.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="analytics-container">
+            <a href="{{ url_for('analytics') }}" class="analytics-link">View Attendance Analytics</a>
+        </div>
+    </div>
+{% endblock %}

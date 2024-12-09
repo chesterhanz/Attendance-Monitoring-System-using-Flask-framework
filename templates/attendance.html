@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Attendance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .attendance-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .attendance-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #333;
+        }
+
+        select, button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        select {
+            background-color: #f9f9f9;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .attendance-table th, .attendance-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .attendance-table th {
+            background-color: #f1f1f1;
+        }
+
+        .attendance-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .attendance-table tr:hover {
+            background-color: #f1f9ff;
+        }
+
+        .no-records {
+            text-align: center;
+            font-size: 16px;
+            color: #888;
+            padding: 20px;
+        }
+
+        .back-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-link {
+            font-size: 16px;
+            color: #007BFF;
+            text-decoration: none;
+            padding: 10px;
+            background-color: #f0f8ff;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+            background-color: #e0f0ff;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="attendance-container">
+            <h1>Mark Your Attendance</h1>
+            <form action="{{ url_for('attendance') }}" method="POST" class="attendance-form">
+                <label for="status">Select Attendance Status:</label>
+                <select name="status" id="status" required>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                </select>
+
+                <label for="session">Select Session:</label>
+                <select name="session" id="session" required>
+                    <option value="Morning">Morning</option>
+                    <option value="Afternoon">Afternoon</option>
+                </select>
+
+                <button type="submit">Mark Attendance</button>
+            </form>
+
+            <h2>Your Attendance Records</h2>
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Session</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if attendances %}
+                        {% for record in attendances %}
+                        <tr>
+                            <td>{{ record.date }}</td>
+                            <td>{{ record.status }}</td>
+                            <td>{{ record.session }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="no-records">No attendance records found.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+            <div class="back-links">
+                <a href="{{ url_for('home') }}" class="back-link">Back to Home</a>
+            </div>
+        </div>
+    </main>
+{% endblock %}

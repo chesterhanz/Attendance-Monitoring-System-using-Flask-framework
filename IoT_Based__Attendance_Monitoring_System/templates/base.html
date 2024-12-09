@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    {% block head %} 
+    <title>Attendance Monitoring System</title>
+    {% endblock %}
+    <style>
+        .logo {
+            width: 40px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: rotate(360deg);
+        }
+
+        .navbar-links a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar-links a:hover {
+            color: #ffa500;
+            transform: scale(1.1);
+        }
+        .navbar-container {
+            animation: slideDown 1s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="{{ url_for('home') }}" class="navbar-brand">
+                    <img src="{{ url_for('static', filename='images/image.png') }}" alt="Logo" class="logo">
+                    Attendance Monitoring
+                </a>
+                <ul class="navbar-links">
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('analytics') }}">Analytics</a></li>
+                    <li><a href="{{ url_for('attendance') }}">Attendance</a></li>
+                    <li><a href="{{ url_for('report') }}">Reports</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('logout') }}" class="logout-link">Logout</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+    {% block body %} {% endblock %}
+</body>
+</html>
